@@ -1,0 +1,88 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./dist/css/chessboard-1.0.0.css">
+</head>
+<body>
+
+    <style>
+        .hightlighted-red {
+           box-shadow: inset 0 0 0px 3px  #ff2222;
+           opacity: .8;
+        }
+        .hightlighted-blue {
+           box-shadow: inset 0 0 0px 3px  #406bcc;
+           opacity: .8;
+        }
+        .hightlighted-green {
+           box-shadow:inset 0 0 0px 3px  #2b942b;
+           opacity: .8;
+        }
+    </style>
+    <div id="puto-pato" style="width: 500px"></div>
+    <button id="ruyLopezBtn">Ruy Lopez</button>
+    <button id="startBtn">Reset</button>
+
+    <section>
+        <br>
+        <strong>Moves history:</strong>
+        <br>
+
+        <div id="moves-history"></div>
+
+        <div style="display:none;" id="notification-sound"></div>
+        
+    </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <script src="./dist/js/chessboard-1.0.0.min.js"></script>
+        <script>
+
+            function onDrop  (newLocation, oldLocation, source,
+                     piece, position, orientation) {
+                         const movesHistory = '#moves-history';
+                         document.querySelector(movesHistory).innerHTML +=`${oldLocation} > ${newLocation}<br>`
+            console.log('New location: ' + newLocation)
+            console.log('Old location: ' + oldLocation)
+            console.log('Source: ' + source)
+            console.log('Piece: ' + piece)
+            console.log('Position: ' + Chessboard.objToFen(position))
+            console.log('Orientation: ' + orientation)
+            console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+
+            document.getElementById("notification-sound").innerHTML = '<audio autoplay="true" src="./dist/108615_649468-lq.mp3"></audio>'
+            setTimeout(() => {
+                document.getElementById("notification-sound").innerHTML = '';
+            }, 1000)    
+        }
+
+            var config = {
+             draggable: true,
+            moveSpeed: 'slow',
+            snapbackSpeed: 500,
+            snapSpeed: 100,
+            position: 'start',
+            onDrop : onDrop 
+            }
+            var board = Chessboard('puto-pato', config)
+
+        $('#ruyLopezBtn').on('click', function () {
+            board.position('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
+
+            highlightSquare('.square-a2', 'blue');
+            highlightSquare('.square-g2', 'red');
+            highlightSquare('.square-h1', 'green');
+           
+        })
+        $('#startBtn').on('click', board.start);
+
+
+
+        function highlightSquare(className, color) {
+            document.querySelector(className).classList.add(`hightlighted-${color}`);
+        }
+    </script>
+</body>
+</html>
